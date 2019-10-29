@@ -1,0 +1,16 @@
+{
+    "name": "bb-resize-images",
+    "description": "Resize images uploaded in the bebegarderobe-storage S3 bucket",
+    "version": "0.0.1",
+    "private": true,
+    "dependencies": {
+        "aws-sdk": "^2.437.0"
+    },
+    "devDependencies": {
+        "aws-sdk-mock": "^4.5.0",
+        "jest": "^24.7.1"
+    },
+    "scripts": {
+        "test": "jest"
+    }
+}
