@@ -68,7 +68,7 @@ Resources:
       Timeout: 60
       Policies:
         - S3ReadPolicy:
-          BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
+            BucketName: !Ref simpleappbucket
       Events:
         simpleappbucketEvent:
           Type: S3
