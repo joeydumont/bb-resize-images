@@ -79,17 +79,7 @@ Resources:
               S3Key:
                 Rules:
                   - Name: suffix
-                    Value: ".jpg"
-                  - Name: suffix
-                    Value: ".JPG"
-                  - Name: suffix
                     Value: ".jpeg"
-                  - Name: suffix
-                    Value: ".JPEG"
-                  - Name: suffix
-                    Value: ".png"
-                  - Name: suffix
-                    Value: ".PNG"
   simpleappbucket:
     Type: AWS::S3::Bucket
     Properties:
