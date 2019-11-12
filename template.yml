@@ -56,6 +56,36 @@ Resources:
                 Rules:
                   - Name: suffix
                     Value: ".json"
+
+  ResizeImagesFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./
+      Handler: src/handlers/resize-images.resizeImagesHandler
+      Runtime: nodejs10.x
+      Description: A Lambda function that resizes images.
+      MemorySize: 128
+      Timeout: 60
+      Policies:
+        - S3ReadPolicy:
+          BucketName: !Ref simpleappbucket
+      Events:
+        simpleappbucketEvent:
+          Type: S3
+          Properties:
+            Bucket: !Ref simpleappbucket
+            Events: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: ".jpg"
+                  - Name: suffix
+                    Value: ".JPG"
+                  - Name: suffix
+                    Value: ".png"
+                  - Name: suffix
+                    Value: ".PNG"
   simpleappbucket:
     Type: AWS::S3::Bucket
     Properties:

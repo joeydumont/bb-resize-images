@@ -4,7 +4,8 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
-        "aws-sdk": "^2.437.0"
+        "aws-sdk": "^2.437.0",
+        "sharp": "^0.18.4"
     },
     "devDependencies": {
         "aws-sdk-mock": "^4.5.0",
