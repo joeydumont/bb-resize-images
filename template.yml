@@ -68,7 +68,7 @@ Resources:
       Timeout: 60
       Policies:
         - S3ReadPolicy:
-            BucketName: !Ref simpleappbucket
+            BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
       Events:
         simpleappbucketEvent:
           Type: S3
@@ -82,6 +82,10 @@ Resources:
                     Value: ".jpg"
                   - Name: suffix
                     Value: ".JPG"
+                  - Name: suffix
+                    Value: ".jpeg"
+                  - Name: suffix
+                    Value: ".JPEG"
                   - Name: suffix
                     Value: ".png"
                   - Name: suffix
