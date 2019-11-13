@@ -32,30 +32,30 @@ Resources:
   # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
 
   # This is a Lambda function config associated with the source code: s3-json-logger.js
-  s3JsonLoggerFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      CodeUri: ./
-      Handler: src/handlers/s3-json-logger.s3JsonLoggerHandler
-      Runtime: nodejs10.x
-      Description: A Lambda function that logs a json file sent to S3 bucket.
-      MemorySize: 128
-      Timeout: 60
-      Policies:
-        # Give Read Permissions to the S3 Bucket
-        - S3ReadPolicy:
-            BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
-      Events:
-        simpleappbucketEvent:
-          Type: S3
-          Properties:
-            Bucket: !Ref simpleappbucket
-            Events: s3:ObjectCreated:*
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: suffix
-                    Value: ".json"
+  # s3JsonLoggerFunction:
+  #   Type: AWS::Serverless::Function
+  #   Properties:
+  #     CodeUri: ./
+  #     Handler: src/handlers/s3-json-logger.s3JsonLoggerHandler
+  #     Runtime: nodejs10.x
+  #     Description: A Lambda function that logs a json file sent to S3 bucket.
+  #     MemorySize: 128
+  #     Timeout: 60
+  #     Policies:
+  #       # Give Read Permissions to the S3 Bucket
+  #       - S3ReadPolicy:
+  #           BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
+  #     Events:
+  #       simpleappbucketEvent:
+  #         Type: S3
+  #         Properties:
+  #           Bucket: !Ref simpleappbucket
+  #           Events: s3:ObjectCreated:*
+  #           Filter:
+  #             S3Key:
+  #               Rules:
+  #                 - Name: suffix
+  #                   Value: ".json"
 
   ResizeImagesFunction:
     Type: AWS::Serverless::Function
@@ -68,19 +68,16 @@ Resources:
       Timeout: 60
       Policies:
         - S3ReadPolicy:
-            BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
+            BucketName: bebegarderobe-storage
       Events:
         simpleappbucketEvent:
           Type: S3
           Properties:
-            Bucket: !Ref simpleappbucket
+            Bucket: bebegarderobe-storage
             Events: s3:ObjectCreated:*
             Filter:
               S3Key:
                 Rules:
+                # Only one suffix allowed: https://github.com/aws/aws-cli/issues/1465
                   - Name: suffix
                     Value: ".jpeg"
-  simpleappbucket:
-    Type: AWS::S3::Bucket
-    Properties:
-      BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
