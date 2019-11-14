@@ -68,12 +68,12 @@ Resources:
       Timeout: 60
       Policies:
         - S3ReadPolicy:
-            BucketName: bebegarderobe-storage
+            BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
       Events:
         simpleappbucketEvent:
           Type: S3
           Properties:
-            Bucket: bebegarderobe-storage
+            Bucket: !Ref simpleappbucket
             Events: s3:ObjectCreated:*
             Filter:
               S3Key:
@@ -81,3 +81,7 @@ Resources:
                 # Only one suffix allowed: https://github.com/aws/aws-cli/issues/1465
                   - Name: suffix
                     Value: ".jpeg"
+  simpleappbucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
