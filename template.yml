@@ -80,7 +80,7 @@ Resources:
                 Rules:
                 # Only one suffix allowed: https://github.com/aws/aws-cli/issues/1465
                   - Name: suffix
-                    Value: ".jpeg"
+                    Value: ".JPG"
   simpleappbucket:
     Type: AWS::S3::Bucket
     Properties:
