@@ -61,6 +61,12 @@ exports.resizeImagesHandler = async (event, context) => {
             splitKey = record.s3.object.key.split('/')
             prefix = splitKey.splice(splitKey.len()-1, 0, "orig")
             newKey = prefix.join('/')
+
+            // Show keys and stuff.
+            console.log('File extension: %s', fileExt)
+            console.log('Split key: %s', splitKey)
+            console.log('prefix: %s', prefix)
+            console.log('newKey: %s', newKey)
             const readStreamOrig = readStreamFromS3(params)
             const {
                 passThroughStream,
@@ -77,6 +83,13 @@ exports.resizeImagesHandler = async (event, context) => {
                 .pipe(writeStreamOrig)
 
             const uploadedData = await uploadFinishedOrig
+
+            console.log("Original width: %s", origWidth)
+            console.log("Original height: %s ", origHeight)
+
+            console.log('Image was reuploaded', {
+                ...uploadedData
+            })
 
             // Have to determine the original width and height.
             // Can that be done through a stream, or does it have to be done
@@ -102,6 +115,7 @@ exports.resizeImagesHandler = async (event, context) => {
             })
 
         } catch (error) {
+            console.log('Error calling S3 getObject: %s', error)
             console.error('Error calling S3 getObject:', error);
             throw error;
         }
