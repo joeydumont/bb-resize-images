@@ -5,7 +5,7 @@
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/format-version-structure.html
 AWSTemplateFormatVersion: 2010-09-09
 Description: >-
-  Resize images uploaded in the bebegarderobe-storage S3 bucket
+  Resize images uploaded in the simpleappbucket S3 bucket
 
 # Transform section specifies one or more macros that AWS CloudFormation uses to process your template
 # https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/transform-section-structure.html
@@ -61,7 +61,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
-      Handler: src/handlers/resize-images.resizeImagesHandler
+      Handler: src/handlers/resizes-images.resizeImagesHandler
       Runtime: nodejs10.x
       Description: A Lambda function that resizes images.
       MemorySize: 128
