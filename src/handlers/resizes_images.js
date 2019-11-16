@@ -96,7 +96,7 @@ exports.resizeImagesHandler = async (event, context) => {
             // before processing?
             // Compute ratio of width/height. width will always be 500 pixels in the end.
             const ratio = origWidth / origHeight
-            const readSTream = readStreamFromS3(Bucket: params[0], Key: newKey )
+            const readSTream = readStreamFromS3({Bucket: params[0], Key: newKey})
             const resizeStream = resizeStream({500, 500/ratio})
             const {
                 writeStream,
