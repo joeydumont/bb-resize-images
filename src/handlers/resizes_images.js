@@ -63,10 +63,10 @@ exports.resizeImagesHandler = async (event, context) => {
             newKey = prefix.join('/')
 
             // Show keys and stuff.
-            console.log('File extension: %s', fileExt)
-            console.log('Split key: %s', splitKey)
-            console.log('prefix: %s', prefix)
-            console.log('newKey: %s', newKey)
+            console.log('File extension: ' + fileExt)
+            console.log('Split key:' + splitKey)
+            console.log('prefix:' + prefix)
+            console.log('newKey: ' + newKey)
             const readStreamOrig = readStreamFromS3(params)
             const {
                 passThroughStream,
@@ -84,8 +84,8 @@ exports.resizeImagesHandler = async (event, context) => {
 
             const uploadedData = await uploadFinishedOrig
 
-            console.log("Original width: %s", origWidth)
-            console.log("Original height: %s ", origHeight)
+            console.log("Original width: " + origWidth)
+            console.log("Original height: " + origHeight)
 
             console.log('Image was reuploaded', {
                 ...uploadedData
@@ -115,8 +115,8 @@ exports.resizeImagesHandler = async (event, context) => {
             })
 
         } catch (error) {
-            console.log('Error calling S3 getObject: %s', error)
-            console.error('Error calling S3 getObject:', error);
+            console.log('Error calling S3 getObject: ' + error)
+            console.error('Error calling S3 getObject:' + error);
             throw error;
         }
     });
