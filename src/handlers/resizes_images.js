@@ -61,7 +61,7 @@ exports.resizeImagesHandler = async (event, context) => {
             // First, copy the original to a new file.
             const fileExt = record.s3.object.key.split('.').pop();
             const splitKey = record.s3.object.key.split('/');
-            const prefix = splitKey.splice(splitKey.len()-1, 0, "orig");
+            const prefix = splitKey.splice(splitKey.length-1, 0, "orig");
             const newKey = prefix.join('/');
 
             // Show keys and stuff.
