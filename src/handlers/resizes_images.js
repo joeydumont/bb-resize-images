@@ -32,7 +32,7 @@ const writeStreamToS3 = ({Bucket, Key}) => {
 // Get size from stream (sharp)
 const getSizeFromStream = () => {
     const pass = new stream.PassThrough();
-    const metadata = sharp.metadata();
+    const metadata = await sharp(pass).metadata();
     return {
         writeStream: pass,
         width: metadata.width,
@@ -61,13 +61,13 @@ exports.resizeImagesHandler = async (event, context) => {
             // First, copy the original to a new file.
             const fileExt = record.s3.object.key.split('.').pop();
             const splitKey = record.s3.object.key.split('/');
-            const prefix = splitKey.splice(splitKey.length-1, 0, "orig");
-            const newKey = prefix.join('/');
+            const prefix = splitKey.splice(-1, 0, "orig");
+            const newKey = splitKey.join('/');
 
             // Show keys and stuff.
             console.log('File extension: ' + fileExt);
             console.log('Split key:' + splitKey);
-            console.log('prefix:' + prefix);
+            //console.log('prefix:' + prefix);
             console.log('newKey: ' + newKey);
             const readStreamOrig = readStreamFromS3(params);
             const {
