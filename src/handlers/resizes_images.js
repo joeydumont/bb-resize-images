@@ -14,14 +14,14 @@ const readStreamFromS3 = ({Bucket, Key}) => {
 }
 
 // Function to create a write stream to S3.
-const writeStreamToS3 = ({Bucket, Key, ImageType}) => {
+const writeStreamToS3 = ({Bucket, Key}) => {
     const pass = new stream.PassThrough()
     return {
         writeStream: pass,
         uploadFinished: s3.upload({
             Body: pass,
             Bucket,
-            ContentType: ImageType,
+            ContentType: 'image/jpeg',
             Key
         }).promise()
     }
@@ -39,10 +39,10 @@ const getSizeFromStream = () => {
 }
 
 // Resize image stream (sharp).
-const resizeStream = ({width, height, ImageFmt}) => {
+const resizeStream = ({width, height}) => {
     return sharp()
         .resize(width, height)
-        .toFormat(ImageFmt)
+        .toFormat('jpeg')
 }
 
 /**
