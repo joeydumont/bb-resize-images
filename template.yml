@@ -61,7 +61,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       CodeUri: ./
-      Handler: src/handlers/resizes-images.resizeImagesHandler
+      Handler: src/handlers/resizes_images.resizeImagesHandler
       Runtime: nodejs10.x
       Description: A Lambda function that resizes images.
       MemorySize: 128
