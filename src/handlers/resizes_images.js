@@ -70,18 +70,29 @@ exports.resizeImagesHandler = async (event, context) => {
             //console.log('prefix:' + prefix);
             console.log('newKey: ' + newKey);
             const readStreamOrig = readStreamFromS3(params);
-            const {
-                passThroughStream,
-                origWidth,
-                origHeight
-            } = getSizeFromStream();
+
+            // Create a pipeline inline to read the metadata.
+            let origWidth;
+            let origHeight;
+            const pipeline = sharp()
+
+            pipeline.metadata().then(metadata => {
+                origWidth = metadata.width;
+                origHeight = metadata.height;
+            });
+
+            //const {
+            //    passThroughStream,
+            //    origWidth,
+            //    origHeight
+            //} = getSizeFromStream();
             const {
                 writeStreamOrig,
                 uploadFinishedOrig
             } = writeStreamToS3({Bucket: params[0], Key: newKey});
 
             readStreamOrig
-                .pipe(passThroughStream)
+                .pipe(pipeline)
                 .pipe(writeStreamOrig);
 
             const uploadedData = await uploadFinishedOrig;
@@ -99,7 +110,7 @@ exports.resizeImagesHandler = async (event, context) => {
             // Compute ratio of width/height. width will always be 500 pixels in the end.
             const ratio = origWidth / origHeight;
             const readStream = readStreamFromS3({Bucket: params[0], Key: newKey});
-                        const resizeStreamVar = resizeStream({width: 500, height: 500/ratio});
+            const resizeStreamVar = resizeStream({width: 500, height: 500/ratio});
             const {
                 writeStream,
                 uploadFinished
