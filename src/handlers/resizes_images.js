@@ -32,13 +32,17 @@ const writeStreamToS3 = ({Bucket, Key}) => {
 // Get size from stream (sharp)
 const getSizeFromStream = () => {
     const pass = new stream.PassThrough();
-    const metadata = await sharp(pass).metadata();
-    return {
-        writeStream: pass,
-        width: metadata.width,
-        height: metadata.height
-    };
+    const metadata = await sharp(pass).metadata().then(metadata =>
+        {
+            return {
+                writeStream: pass,
+                width: metadata.width,
+                height: metadata.height
+            }
+
+        });
 };
+
 
 // Resize image stream (sharp).
 const resizeStream = ({width, height}) => {
@@ -72,25 +76,26 @@ exports.resizeImagesHandler = async (event, context) => {
             const readStreamOrig = readStreamFromS3(params);
 
             // Create a pipeline inline to read the metadata.
-            let origWidth;
-            let origHeight;
-            const pipeline = sharp().metadata().then(metadata =>{
-                origWidth = metadata.width;
-                origHeight = metadata.height;
-            });
+            //let origWidth;
+            //let origHeight;
+            //const pipeline = sharp().metadata().then(metadata =>{
+            //    origWidth = metadata.width;
+            //    origHeight = metadata.height;
+            //});
 
-            //const {
-            //    passThroughStream,
-            //    origWidth,
-            //    origHeight
-            //} = getSizeFromStream();
+            const {
+                passThroughStream,
+                origWidth,
+                origHeight
+            } = getSizeFromStream();
+
             const {
                 writeStreamOrig,
                 uploadFinishedOrig
             } = writeStreamToS3({Bucket: params[0], Key: newKey});
 
             readStreamOrig
-                .pipe(pipeline)
+                .pipe(passThroughStream)
                 .pipe(writeStreamOrig);
 
             const uploadedData = await uploadFinishedOrig;
