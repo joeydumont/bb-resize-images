@@ -74,9 +74,7 @@ exports.resizeImagesHandler = async (event, context) => {
             // Create a pipeline inline to read the metadata.
             let origWidth;
             let origHeight;
-            const pipeline = sharp()
-
-            pipeline.metadata().then(metadata => {
+            const pipeline = sharp().metadata().then(metadata =>{
                 origWidth = metadata.width;
                 origHeight = metadata.height;
             });
