@@ -32,13 +32,13 @@ const writeStreamToS3 = ({Bucket, Key}) => {
 // Get size from stream (sharp)
 const getSizeFromStream = () => {
     const pass = new stream.PassThrough();
-    const metadata = await sharp(pass).metadata().then(metadata =>
+    const metadata = sharp(pass).metadata().then(metadata =>
         {
             return {
                 writeStream: pass,
                 width: metadata.width,
                 height: metadata.height
-            }
+            };
 
         });
 };
