@@ -73,6 +73,21 @@ exports.resizeImagesHandler = async (event, context) => {
             console.log('Split key:' + splitKey);
             //console.log('prefix:' + prefix);
             console.log('newKey: ' + newKey);
+
+            // Read the metadata of the image
+            const {
+                origHeight,
+                origWidth
+            } = sharp(s3.getObject(params))
+                    .metadata()
+                    .then(metadata => {
+                        return {
+                            origWidth : metadata.width,
+                            origHeight: metadata.height
+                        };});
+
+
+            // Copy the object to another location.
             const readStreamOrig = readStreamFromS3(params);
 
             // Create a pipeline inline to read the metadata.
@@ -83,11 +98,11 @@ exports.resizeImagesHandler = async (event, context) => {
             //    origHeight = metadata.height;
             //});
 
-            const {
-                passThroughStream,
-                origWidth,
-                origHeight
-            } = getSizeFromStream();
+            //const {
+            //    passThroughStream,
+            //    origWidth,
+            //    origHeight
+            //} = getSizeFromStream();
 
             const {
                 writeStreamOrig,
@@ -95,7 +110,7 @@ exports.resizeImagesHandler = async (event, context) => {
             } = writeStreamToS3({Bucket: params[0], Key: newKey});
 
             readStreamOrig
-                .pipe(passThroughStream)
+                //.pipe(passThroughStream)
                 .pipe(writeStreamOrig);
 
             const uploadedData = await uploadFinishedOrig;
