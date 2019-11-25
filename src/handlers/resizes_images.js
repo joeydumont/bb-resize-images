@@ -75,16 +75,26 @@ exports.resizeImagesHandler = async (event, context) => {
             console.log('newKey: ' + newKey);
 
             // Read the metadata of the image
-            const {
-                origHeight,
-                origWidth
-            } = sharp(s3.getObject(params))
-                    .metadata()
-                    .then(metadata => {
-                        return {
-                            origWidth : metadata.width,
-                            origHeight: metadata.height
-                        };});
+            //
+            const file = require('fs').createWriteStream('/tmp/image.jpg');
+            const readStreamMetadata = readStreamFromS3(params);
+
+            readStreamMetadata.pipe(file)
+
+            const metadata = await sharp('/tmp/image.jpg').metadata();
+
+            origHeight = metadata.height;
+            origWidth = metadata.width;
+            // const {
+            //     origHeight,
+            //     origWidth
+            // } = sharp(s3.getObject(params))
+            //         .metadata()
+            //         .then(metadata => {
+            //             return {
+            //                 origWidth : metadata.width,
+            //                 origHeight: metadata.height
+            //             };});
 
 
             // Copy the object to another location.
