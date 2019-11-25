@@ -81,6 +81,8 @@ exports.resizeImagesHandler = async (event, context) => {
 
             readStreamMetadata.pipe(file)
 
+            const result = await file;
+
             const metadata = await sharp('/tmp/image.jpg').metadata();
 
             origHeight = metadata.height;
