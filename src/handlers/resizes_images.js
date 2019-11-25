@@ -109,9 +109,13 @@ exports.resizeImagesHandler = async (event, context) => {
                 uploadFinishedOrig
             } = writeStreamToS3({Bucket: params[0], Key: newKey});
 
+            //readStreamOrig
+            //    //.pipe(passThroughStream)
+            //    .pipe(writeStreamOrig);
+
             readStreamOrig
-                //.pipe(passThroughStream)
                 .pipe(writeStreamOrig);
+
 
             const uploadedData = await uploadFinishedOrig;
 
