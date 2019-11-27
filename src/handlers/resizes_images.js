@@ -6,7 +6,7 @@ const AWS = require('aws-sdk');
 const s3 = new AWS.S3({
     signatureVersion: 'v4'
 });
-
+const s3s = require('s3-streams')
 
 // Libraries for image resize.
 const stream = require('stream');
@@ -14,21 +14,29 @@ const sharp = require('sharp');
 
 // Function to create a read stream to an S3 object.
 const readStreamFromS3 = ({Bucket, Key}) => {
-    return s3.getObject({Bucket, Key}).createReadStream();
+    //return s3.getObject({Bucket, Key}).createReadStream();
+    return s3s.ReadStream(s3, {
+        Bucket: Bucket,
+        Key: Key
+    })
 };
 
 // Function to create a write stream to S3.
 const writeStreamToS3 = ({Bucket, Key}) => {
     const pass = new stream.PassThrough();
-    return {
-        writeStream: pass,
-        uploadFinished: s3.upload({
-            Body: pass,
-            Bucket,
-            ContentType: 'image/jpeg',
-            Key
-        }).promise()
-    };
+    //return {
+    //    writeStream: pass,
+    //    uploadFinished: s3.upload({
+    //        Body: pass,
+    //        Bucket,
+    //        ContentType: 'image/jpeg',
+    //        Key
+    //    }).promise()
+    //};
+    return s3s.WriteStream(s3, {
+        Bucket: Bucket,
+        Key: Key
+    })
 };
 
 // Resize image stream (sharp).
@@ -67,15 +75,17 @@ exports.resizeImagesHandler = async (event, context) => {
             // Copy the object to another location.
             const readStreamOrig = readStreamFromS3(params);
 
-            const {
-                writeStreamOrig,
-                uploadFinishedOrig
-            } = writeStreamToS3({Bucket: params[0], Key: newKey});
+            //const {
+            //    writeStreamOrig,
+            //    uploadFinishedOrig
+            //} = writeStreamToS3({Bucket: params[0], Key: newKey})
+
+            const writeStreamOrig = writeStreamToS3({Bucket: params[0], Key: newKey})
 
             readStreamOrig
                 .pipe(writeStreamOrig);
 
-            const uploadedData = await uploadFinishedOrig;
+            //const uploadedData = await uploadFinishedOrig;
 
             console.log('Image was reuploaded', {
                 ...uploadedData
@@ -89,12 +99,14 @@ exports.resizeImagesHandler = async (event, context) => {
                 uploadFinished
             } = writeStreamToS3(params);
 
+            const writeStream = writeStreamToS3(params);
+
             // Trigger the stream.
             readStream
                 .pipe(resizeStreamVar)
                 .pipe(writeStream);
 
-            const uploadedDataResized = await uploadFinished;
+            //const uploadedDataResized = await uploadFinished;
 
             console.log('Image was resized:', {
                 ...uploadedDataResized

@@ -6,7 +6,8 @@
     "dependencies": {
         "aws-sdk": "^2.437.0",
         "eslint": "^6.6.0",
-        "sharp": "^0.18.4"
+        "sharp": "^0.18.4",
+        "s3-streams": "^0.4.0"
     },
     "devDependencies": {
         "aws-sdk-mock": "^4.5.0",
