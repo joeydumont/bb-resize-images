@@ -29,25 +29,11 @@ const writeStreamToS3 = ({Bucket, Key}) => {
     };
 };
 
-// Get size from stream (sharp)
-const getSizeFromStream = () => {
-    const pass = new stream.PassThrough();
-    const metadata = sharp(pass).metadata().then(metadata =>
-        {
-            return {
-                writeStream: pass,
-                width: metadata.width,
-                height: metadata.height
-            };
-
-        });
-};
-
-
 // Resize image stream (sharp).
 const resizeStream = ({width, height}) => {
     return sharp()
         .resize(width, height)
+        .max()
         .toFormat('jpeg');
 };
 
@@ -74,65 +60,18 @@ exports.resizeImagesHandler = async (event, context) => {
             //console.log('prefix:' + prefix);
             console.log('newKey: ' + newKey);
 
-            // Read the metadata of the image
-            //
-            const file = require('fs').createWriteStream('/tmp/image.jpg');
-            const readStreamMetadata = readStreamFromS3(params);
-
-            readStreamMetadata.pipe(file)
-
-            const result = await file;
-
-            const metadata = await sharp('/tmp/image.jpg').metadata();
-
-            origHeight = metadata.height;
-            origWidth = metadata.width;
-            // const {
-            //     origHeight,
-            //     origWidth
-            // } = sharp(s3.getObject(params))
-            //         .metadata()
-            //         .then(metadata => {
-            //             return {
-            //                 origWidth : metadata.width,
-            //                 origHeight: metadata.height
-            //             };});
-
-
             // Copy the object to another location.
             const readStreamOrig = readStreamFromS3(params);
-
-            // Create a pipeline inline to read the metadata.
-            //let origWidth;
-            //let origHeight;
-            //const pipeline = sharp().metadata().then(metadata =>{
-            //    origWidth = metadata.width;
-            //    origHeight = metadata.height;
-            //});
-
-            //const {
-            //    passThroughStream,
-            //    origWidth,
-            //    origHeight
-            //} = getSizeFromStream();
 
             const {
                 writeStreamOrig,
                 uploadFinishedOrig
             } = writeStreamToS3({Bucket: params[0], Key: newKey});
 
-            //readStreamOrig
-            //    //.pipe(passThroughStream)
-            //    .pipe(writeStreamOrig);
-
             readStreamOrig
                 .pipe(writeStreamOrig);
 
-
             const uploadedData = await uploadFinishedOrig;
-
-            console.log("Original width: " + origWidth);
-            console.log("Original height: " + origHeight);
 
             console.log('Image was reuploaded', {
                 ...uploadedData
@@ -144,7 +83,7 @@ exports.resizeImagesHandler = async (event, context) => {
             // Compute ratio of width/height. width will always be 500 pixels in the end.
             const ratio = origWidth / origHeight;
             const readStream = readStreamFromS3({Bucket: params[0], Key: newKey});
-            const resizeStreamVar = resizeStream({width: 500, height: 500/ratio});
+            const resizeStreamVar = resizeStream({width: 500, height: 500});
             const {
                 writeStream,
                 uploadFinished
