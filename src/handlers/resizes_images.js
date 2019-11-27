@@ -3,7 +3,9 @@
 
 // Create a client to read objects from S3
 const AWS = require('aws-sdk');
-const s3 = new AWS.S3();
+const s3 = new AWS.S3({
+    signatureVersion: 'v4'
+});
 
 
 // Libraries for image resize.
@@ -59,6 +61,8 @@ exports.resizeImagesHandler = async (event, context) => {
             console.log('Split key:' + splitKey);
             //console.log('prefix:' + prefix);
             console.log('newKey: ' + newKey);
+            console.log('params', {...params})
+
 
             // Copy the object to another location.
             const readStreamOrig = readStreamFromS3(params);
@@ -77,17 +81,13 @@ exports.resizeImagesHandler = async (event, context) => {
                 ...uploadedData
             });
 
-            // Have to determine the original width and height.
-            // Can that be done through a stream, or does it have to be done
-            // before processing?
-            // Compute ratio of width/height. width will always be 500 pixels in the end.
-            const ratio = origWidth / origHeight;
+            // Resize the image and overwrite the original upload.
             const readStream = readStreamFromS3({Bucket: params[0], Key: newKey});
             const resizeStreamVar = resizeStream({width: 500, height: 500});
             const {
                 writeStream,
                 uploadFinished
-            } = writeStreamToS3({Bucket: params[0], Key: params[1]});
+            } = writeStreamToS3(params);
 
             // Trigger the stream.
             readStream
