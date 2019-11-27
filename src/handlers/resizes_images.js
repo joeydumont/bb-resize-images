@@ -87,9 +87,9 @@ exports.resizeImagesHandler = async (event, context) => {
 
             //const uploadedData = await uploadFinishedOrig;
 
-            console.log('Image was reuploaded', {
-                ...uploadedData
-            });
+            //console.log('Image was reuploaded', {
+            //    ...uploadedData
+            //});
 
             // Resize the image and overwrite the original upload.
             const readStream = readStreamFromS3({Bucket: params[0], Key: newKey});
@@ -108,9 +108,9 @@ exports.resizeImagesHandler = async (event, context) => {
 
             //const uploadedDataResized = await uploadFinished;
 
-            console.log('Image was resized:', {
-                ...uploadedDataResized
-            });
+            //console.log('Image was resized:', {
+            //    ...uploadedDataResized
+            //});
 
         } catch (error) {
             console.log('Error calling S3 getObject: ' + error);
