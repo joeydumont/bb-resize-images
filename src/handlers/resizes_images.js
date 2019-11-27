@@ -16,8 +16,8 @@ const sharp = require('sharp');
 const readStreamFromS3 = ({Bucket, Key}) => {
     //return s3.getObject({Bucket, Key}).createReadStream();
     return s3s.ReadStream(s3, {
-        Bucket: Bucket,
-        Key: Key
+        Bucket,
+        Key
     })
 };
 
@@ -34,8 +34,8 @@ const writeStreamToS3 = ({Bucket, Key}) => {
     //    }).promise()
     //};
     return s3s.WriteStream(s3, {
-        Bucket: Bucket,
-        Key: Key
+        Bucket,
+        Key
     })
 };
 
