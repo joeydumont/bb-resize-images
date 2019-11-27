@@ -24,7 +24,7 @@ const readStreamFromS3 = ({Bucket, Key}) => {
 // Function to create a write stream to S3.
 const writeStreamToS3 = ({Bucket, Key}) => {
     const pass = new stream.PassThrough();
-    //return {
+    //return {  
     //    writeStream: pass,
     //    uploadFinished: s3.upload({
     //        Body: pass,
@@ -94,10 +94,10 @@ exports.resizeImagesHandler = async (event, context) => {
             // Resize the image and overwrite the original upload.
             const readStream = readStreamFromS3({Bucket: params[0], Key: newKey});
             const resizeStreamVar = resizeStream({width: 500, height: 500});
-            const {
-                writeStream,
-                uploadFinished
-            } = writeStreamToS3(params);
+            //const {
+            //    writeStream,
+            //    uploadFinished
+            //} = writeStreamToS3(params);
 
             const writeStream = writeStreamToS3(params);
 
