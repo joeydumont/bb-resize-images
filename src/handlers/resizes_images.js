@@ -78,6 +78,7 @@ exports.resizeImagesHandler = async (event, context) => {
 
             // Copy the object to another location.
             console.log('Defining read stream.')
+            const pipeline = util.promisify(stream.pipeline)
             const readStreamOrig = readStreamFromS3(params);
             //const {
             //    writeStreamOrig,
@@ -88,8 +89,9 @@ exports.resizeImagesHandler = async (event, context) => {
             const writeStreamOrig = writeStreamToS3({Bucket: params[0], Key: newKey})
 
             console.log('Initiating the pipe')
-            readStreamOrig
-                .pipe(writeStreamOrig);
+            //readStreamOrig
+            //    .pipe(writeStreamOrig);
+            await (readStreamOrig, writeStreamOrig)
 
             //const uploadedData = await uploadFinishedOrig;
 
@@ -99,6 +101,7 @@ exports.resizeImagesHandler = async (event, context) => {
 
             // Resize the image and overwrite the original upload.
             console.log('Defining read stream for resize')
+            const pipelineResize = util.promisify(stream.pipeline)
             const readStream = readStreamFromS3({Bucket: params[0], Key: newKey});
             console.log('Defining resize stream')
             const resizeStreamVar = resizeStream({width: 500, height: 500});
@@ -111,10 +114,11 @@ exports.resizeImagesHandler = async (event, context) => {
             const writeStream = writeStreamToS3(params);
 
             // Trigger the stream.
-            console.log('Trigger resize stream')
-            readStream
-                .pipe(resizeStreamVar)
-                .pipe(writeStream);
+            //console.log('Trigger resize stream')
+            //readStream
+            //    .pipe(resizeStreamVar)
+            //    .pipe(writeStream);
+            await pipelineResize(readStream, resizeStreamVar, writeStream)
 
             //const uploadedDataResized = await uploadFinished;
 
