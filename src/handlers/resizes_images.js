@@ -48,7 +48,7 @@ exports.resizeImagesHandler = async (event, context) => {
             const fileExt = record.s3.object.key.split('.').pop();
             const splitKey = record.s3.object.key.split('/');
             const prefix = splitKey.splice(-1, 0, "orig");
-            const newKey = splitKey.join('/');
+            const newKey = 'orig/' + params['Key']; //splitKey.join('/');
 
             console.log('File extension: ' + fileExt);
             console.log('Split key:' + splitKey);
