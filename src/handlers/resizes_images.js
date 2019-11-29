@@ -64,7 +64,7 @@ exports.resizeImagesHandler = async (event, context) => {
             const writeStreamOrig = writeStreamToS3({Bucket: params[0], Key: newKey})
 
             console.log('Initiating the pipe')
-            await (readStreamOrig, writeStreamOrig)
+            await pipeline(readStreamOrig, writeStreamOrig)
             
             // Pipeline to resize the original file and write the new in the original upload location.
             console.log('Defining read stream for resize')
