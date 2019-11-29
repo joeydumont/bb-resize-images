@@ -67,7 +67,7 @@ Resources:
       MemorySize: 128
       Timeout: 60
       Policies:
-        - S3ReadPolicy:
+        - S3FullAccessPolicy:
             BucketName: !Sub aws-${AWS::Region}-${AWS::AccountId}-${AppId}-simpleappbucket
       Events:
         simpleappbucketEvent:
@@ -79,6 +79,8 @@ Resources:
               S3Key:
                 Rules:
                 # Only one suffix allowed: https://github.com/aws/aws-cli/issues/1465
+                  - Name: prefix
+                    Value: "media"
                   - Name: suffix
                     Value: ".JPG"
   simpleappbucket:
