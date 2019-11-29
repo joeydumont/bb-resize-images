@@ -9,7 +9,7 @@ const s3 = new AWS.S3({
 const s3s = require('s3-streams')
 
 // Libraries for image resize.
-const util = require('util')
+const util = require('util');
 const stream = require('stream');
 const sharp = require('sharp');
 
@@ -39,7 +39,7 @@ const writeStreamToS3 = ({Bucket, Key}) => {
     //};
     return s3s.WriteStream(s3, {
         Bucket: Bucket,
-        Key : Key
+        Key : Key,
         ContentType: 'image/jpeg',
     })
 };
