@@ -9,8 +9,10 @@ const s3 = new AWS.S3({
 const s3s = require('s3-streams')
 
 // Libraries for image resize.
+const util = require('util')
 const stream = require('stream');
 const sharp = require('sharp');
+
 
 AWS.config.logger = console.log
 
