@@ -20,15 +20,15 @@ AWS.config.logger = console.log
 const readStreamFromS3 = ({Bucket, Key}) => {
     //return s3.getObject({Bucket, Key}).createReadStream();
     return s3s.ReadStream(s3, {
-        Bucket,
-        Key,
+        Bucket: Bucket,
+        Key: Key,
     })
 };
 
 // Function to create a write stream to S3.
 const writeStreamToS3 = ({Bucket, Key}) => {
     const pass = new stream.PassThrough();
-    //return {  
+    //return {
     //    writeStream: pass,
     //    uploadFinished: s3.upload({
     //        Body: pass,
@@ -38,8 +38,8 @@ const writeStreamToS3 = ({Bucket, Key}) => {
     //    }).promise()
     //};
     return s3s.WriteStream(s3, {
-        Bucket,
-        Key,
+        Bucket: Bucket,
+        Key : Key
         ContentType: 'image/jpeg',
     })
 };
