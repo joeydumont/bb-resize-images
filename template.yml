@@ -48,7 +48,7 @@ Resources:
           Type: S3
           Properties:
             Bucket: !Ref simpleappbucket
-            Events: s3:ObjectRestore:Post
+            Events: s3:ObjectCreated:Put
             Filter:
               S3Key:
                 Rules:
