@@ -31,7 +31,7 @@ const writeStreamToS3 = ({Bucket, Key, FileFormat}) => {
     return s3s.WriteStream(s3, {
         Bucket: Bucket,
         Key: Key,
-        ContentType: 'image/jpeg',
+        ContentType: ContentType,
     });
 };
 
