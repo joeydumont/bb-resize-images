@@ -48,6 +48,11 @@ Resources:
           Type: S3
           Properties:
             Bucket: !Ref simpleappbucket
+            # We resize the image in-place, so we need to be careful to avoid
+            # infinite loops. The resize functions uses streams, which result
+            # in a POST API call being used instead of PUT, but the web app
+            # uses a simple PUT. This ensures that the resize function is only
+            # called on initial upload of the image.
             Events: s3:ObjectCreated:Put
             Filter:
               S3Key:
