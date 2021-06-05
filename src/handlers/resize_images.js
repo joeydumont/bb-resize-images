@@ -41,6 +41,11 @@ const resizeStream = ({width, height}) => {
         .max();
 };
 
+const readMetadataStream = () => {
+    return sharp()
+        .metadata()
+}
+
 /**
   * A Lambda function that copies the uploaded file to another prefix, then resizes it.
   */
